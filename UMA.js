@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           UMA
 // @namespace      http://tampermonkey.net/
-// @version        0.5
+// @version        0.6
 // @description    try to take over the world!
 // @author         You
 // @match          http://jra.jp/JRADB/*
@@ -12,24 +12,29 @@
 // ==/UserScript==
 
 (function($) {
-  var $uma_tr = $(".mainList tr").filter(function(){ return $(this).children("td.umaKihon").length > 0; });
-  var umamei_list = $uma_tr.find(".umameiCol").map(function(){ return this.innerText;});
-  if (umamei_list.length == 0) {
-    umamei_list =  $uma_tr.find(".umamei").map(function(){ return this.innerText;});
-    if (umamei_list.length == 0) {
-      umamei_list =  $uma_tr.find(".mokuyouUmamei").map(function(){ return this.innerText;});
-    }
-  }
-  if (umamei_list.length == 0) {
-    $uma_tr = $(".mainList tr").filter(function(){ return $(this).children("td.umameiCol").length > 0; });
-    umamei_list = $uma_tr.find(".umameiCol").map(function(){ return this.innerText;});
+  function find_umamei_list($uma_tr){
+    var umamei_list = $uma_tr.find(".umameiCol").map(function(){ return this.innerText;});
     if (umamei_list.length == 0) {
       umamei_list =  $uma_tr.find(".umamei").map(function(){ return this.innerText;});
       if (umamei_list.length == 0) {
         umamei_list =  $uma_tr.find(".mokuyouUmamei").map(function(){ return this.innerText;});
       }
     }
+
+    return umamei_list;
   }
+
+  function get_umamei_list(){
+    var $uma_tr = $(".mainList tr").filter(function(){ return $(this).children("td.umaKihon").length > 0; });
+    var umamei_list = find_umamei_list($uma_tr);
+    if (umamei_list.length == 0) {
+      $uma_tr = $(".mainList tr").filter(function(){ return $(this).children("td.umameiCol").length > 0; });
+      umamei_list = find_umamei_list($uma_tr);
+    }
+    return umamei_list;
+  }
+
+  var umamei_list = get_umamei_list();
   if (umamei_list.length > 0) {
     $('body').append('<div class="umapanel parent" style="height:200px; width:1000px; position:absolute; top:200px; left:200px; border:1px solid #000000; background-color: #ffffff">馬パネル<div>');
     umamei_list.each(function(index){
