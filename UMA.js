@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           UMA
 // @namespace      http://tampermonkey.net/
-// @version        0.3
+// @version        0.4
 // @description    try to take over the world!
 // @author         You
 // @match          http://jra.jp/JRADB/*
@@ -14,10 +14,10 @@
   var $uma_tr = $(".mainList tr").filter(function(){ return $(this).children("td.umaKihon").length > 0; });
   var umamei_list = $uma_tr.find(".umameiCol").map(function(){ return this.innerText;});
   if (umamei_list.length == 0) {
-    umamei_list =  $uma_tr.find(".umamei").map(function(){ return this.innerText;});
+    umamei_list =  $uma_tr.find(".mokuyouUmamei").map(function(){ return this.innerText;});
     if (umamei_list.length == 0) {
       $uma_tr = $(".mainList tr").filter(function(){ return $(this).children("td.umameiCol").length > 0; });
-      umamei_list =  $uma_tr.find(".mokuyouUmamei").map(function(){ return this.innerText;});
+      umamei_list =  $uma_tr.find(".umamei").map(function(){ return this.innerText;});
     }
   }
   if (umamei_list.length > 0) {
