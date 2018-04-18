@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           UMA
 // @namespace      http://tampermonkey.net/
-// @version        0.8
+// @version        0.9
 // @description    try to take over the world!
 // @author         You
 // @match          http://jra.jp/JRADB/*
@@ -139,25 +139,6 @@
     return style;
   }
 
-  function parent_element(){
-    var style_obj = {
-      height: "200px",
-      width: "1000px",
-      position: "absolute",
-      top: "200px",
-      left: "200px",
-      border: "1px solid #000000",
-      "background-color": "#ffffff"
-    };
-
-    var element = $( "<div>", {
-      html: "馬パネル",
-      "class": "umapanel parent",
-      style: extract_style_obj(style_obj)
-    });
-    return element;
-  }
-
   function uma_element(index, uma_info){
     var style_obj = {
       height: "50px",
@@ -180,10 +161,11 @@
 
   var uma_info_list = get_uma_info_list(get_uma_tr_list());
   if (uma_info_list.length > 0) {
-    $('body').append(parent_element());
+    var subwindow = window.open("about:blank", "subwindow", "width=1000,height=300,scrollbars=yes");
+    var $body = $(subwindow.document).find('body');
     $(uma_info_list).each(function(index){
-        $('.parent').append(uma_element(index, this));
+      $body.append(uma_element(index, this));
     });
-    $('.umapanel').draggable();
+    $(subwindow.document).find('.umapanel').draggable();
   }
 })(jQuery);
