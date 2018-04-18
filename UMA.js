@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name           UMA
 // @namespace      http://tampermonkey.net/
-// @version        0.7
+// @version        0.8
 // @description    try to take over the world!
 // @author         You
 // @match          http://jra.jp/JRADB/*
@@ -130,12 +130,58 @@
     return $uma_tr_list;
   }
 
+  function extract_style_obj(style_obj){
+    var style = "";
+    Object.keys(style_obj).forEach(function(key) {
+      style += (key + ":" + style_obj[key] + ";");
+    });
+
+    return style;
+  }
+
+  function parent_element(){
+    var style_obj = {
+      height: "200px",
+      width: "1000px",
+      position: "absolute",
+      top: "200px",
+      left: "200px",
+      border: "1px solid #000000",
+      "background-color": "#ffffff"
+    };
+
+    var element = $( "<div>", {
+      html: "馬パネル",
+      "class": "umapanel parent",
+      style: extract_style_obj(style_obj)
+    });
+    return element;
+  }
+
+  function uma_element(index, uma_info){
+    var style_obj = {
+      height: "50px",
+      width: "50px",
+      top: "-"+index*52+"px",
+      left: index*52+"px",
+      border: "1px solid #000000",
+      "background-color": background_color(uma_info.waku),
+      color: character_color(uma_info.waku)
+    };
+
+    var element = $( "<div>", {
+      html: umaban_string(uma_info.umaban) + uma_info.umamei,
+      "class": "umapanel",
+      style: extract_style_obj(style_obj)
+    });
+    return element;
+  }
+
   var uma_info_list = get_uma_info_list(get_uma_tr_list());
   if (uma_info_list.length > 0) {
-    $('body').append('<div class="umapanel parent" style="height:200px; width:1000px; position:absolute; top:200px; left:200px; border:1px solid #000000; background-color: #ffffff;">馬パネル<div>');
+    $('body').append(parent_element());
     $(uma_info_list).each(function(index){
-        console.log(this);
-        $('.parent').append('<div class="umapanel" style="height:50px; width:50px; top:-'+ index*52 +'px; left:'+ index*52 +'px; border:1px solid #000000; background-color:'+ background_color(this.waku) +'; color:'+ character_color(this.waku) +';">'+ umaban_string(this.umaban) + this.umamei +'<div>');
+        $('.parent').append(uma_element(index, this));
     });
     $('.umapanel').draggable();
   }
