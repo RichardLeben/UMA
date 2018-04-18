@@ -166,11 +166,12 @@
       left: index*52+"px",
       border: "1px solid #000000",
       "background-color": background_color(uma_info.waku),
-      color: character_color(uma_info.waku)
+      color: character_color(uma_info.waku),
+      "font-size": "10px"
     };
 
     var element = $( "<div>", {
-      html: umaban_string(uma_info.umaban) + uma_info.umamei,
+      html: umaban_string(uma_info.umaban) + "<br>" + uma_info.umamei,
       "class": "umapanel",
       style: extract_style_obj(style_obj)
     });
